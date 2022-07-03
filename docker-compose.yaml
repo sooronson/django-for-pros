@@ -20,6 +20,7 @@ services:
     depends_on:
       - db
     environment:
+      - ENVIRONMENT=development
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
