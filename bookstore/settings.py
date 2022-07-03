@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import socket
+
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = [ip[:-1] + '1' for ip in ips]
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +28,7 @@ SECRET_KEY = '824a6o#=x$o-p6b812*ylzneuccqgg(-q33-vh+8%g&hbk+=qz'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -43,15 +47,16 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'book.apps.BookConfig',
 
-
     # non-local party
 
     'crispy_forms',
     'allauth',
     'allauth.account',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,7 +64,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 604800
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
 ROOT_URLCONF = 'bookstore.urls'
 
@@ -162,7 +173,21 @@ ACCOUNT_UNIQUE_EMAIL = True
 DEFAULT_EMAIL_FROM = 'bookstore@mail.com'
 
 STRIPE_PUBLIC_KEY = 'pk_test_51LFzgnKa4Cwuc3ymWTzuO8jyhBhCpcNsGYqGH1hs2cohh' \
-                              '7OvfgAZg3B7RyFapHIQwsrdUrO3e3RrOrADqc7UP46R004RGiK3D5'
+                    '7OvfgAZg3B7RyFapHIQwsrdUrO3e3RrOrADqc7UP46R004RGiK3D5'
 
 STRIPE_SECRET_KEY = 'sk_test_51LFzgnKa4Cwuc3ymB54EAWbn5WyPVHyx4Un9is42WEEw' \
-                         'V7Qyi6sXJ1tvU8bvaVE7jPNVoS0KLV2wbi5kvjzi6STg00pSKIF18e'
+                    'V7Qyi6sXJ1tvU8bvaVE7jPNVoS0KLV2wbi5kvjzi6STg00pSKIF18e'
+
+ENVIRONMENT = os.environ.get('ENVIRONMENT', default='development')
+# production
+if ENVIRONMENT == 'production':
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 3600
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    DEBUG = False

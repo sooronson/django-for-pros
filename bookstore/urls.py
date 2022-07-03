@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("nothing-but-admin/", admin.site.urls),
     path('account/', include('allauth.urls')),
 
     # local party
@@ -28,4 +28,7 @@ urlpatterns = [
     path('account/', include('users.urls')),
     path('books/', include('book.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -34,8 +34,8 @@ class SearchBookView(ListView):
     model = Book
     context_object_name = 'books'
 
-    def get_queryset(self):
-        query = self.request.GET.get('search')
-        return Book.objects.filter(
-            Q(title__icontains=query | Q(author__icontains=query))
-        )
+    # def get_queryset(self):
+    #     query = self.request.GET.get('search')
+    #     return Book.objects.filter(
+    #         Q(title__icontains=query | Q(author__icontains=query))
+    #     )
