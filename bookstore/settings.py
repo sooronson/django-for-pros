@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import socket
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + '1' for ip in ips]
@@ -40,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'whitenose.runserver_nostatic',
+    # 'whitenose.runserver_nostatic',
 
     # local party
 
@@ -49,7 +52,7 @@ INSTALLED_APPS = [
     'book.apps.BookConfig',
 
     # non-local party
-
+#
     'crispy_forms',
     'allauth',
     'allauth.account',
@@ -107,6 +110,7 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators

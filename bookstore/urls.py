@@ -19,8 +19,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path("nothing-but-admin/", admin.site.urls),
-    path('account/', include('allauth.urls')),
+    # path("nothing-but-admin/", admin.site.urls),
+    # path('account/', include('allauth.urls')),
 
     # local party
 
