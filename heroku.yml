@@ -8,7 +8,8 @@ build:
 
 release:
   image: web
-  command: python manage.py collectstatic --no-input
+  command:
+    - python manage.py collectstatic --no-input
 
 run:
   web: gunicorn bookstore.wsgi
