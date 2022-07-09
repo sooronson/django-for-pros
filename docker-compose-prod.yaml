@@ -18,7 +18,7 @@ services:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - SECRET_KEY=824a6o#=x$o-p6b812*ylzneuccqgg(-q33-vh+8%g&hbk+=qz
+      - SECRET_KEY=j6%v6y6*t0j1q141$@+udx0-_*541-lp((w5%u1diw_du3be5h
       - DEBUG=0
 
 
